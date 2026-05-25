@@ -1,0 +1,40 @@
+tickets:
+  - id: TKT-001
+    title: Establish agent scaffolding
+    status: done
+    owner: repo-agent
+    priority: normal
+    created: 2026-05-25
+    updated: 2026-05-25
+    artifacts:
+      concept: .agents/tasks/TKT-001/concept.md
+      plan: .agents/tasks/TKT-001/plan.md
+      task: .agents/tasks/TKT-001/task.md
+      report: .agents/tasks/TKT-001/report.md
+      updates: .agents/tasks/TKT-001/updates/
+    dependencies: []
+    areas:
+      - AGENT.md
+      - .agents/memory
+      - .agents/tasks
+      - .agents/tools
+      - README.md
+    skills:
+      - tkt-management
+  - id: TKT-002
+    title: Add repo-specific boundaries
+    status: done
+    owner: repo-agent
+    priority: normal
+    created: 2026-05-25
+    updated: 2026-05-25
+    artifacts:
+      task: .agents/tasks/TKT-002/task.md
+      report: .agents/tasks/TKT-002/report.md
+    dependencies:
+      - TKT-001
+    areas:
+      - AGENT.md
+      - .agents/memory/principles
+    skills:
+      - tkt-management

@@ -1,0 +1,13 @@
+- range: TKT-001-025
+  file: .agents/tasks/indexes/TKT-001-025.yaml
+  count: 2
+  updated: 2026-05-25
+  statuses:
+    - done: 2
+  areas:
+    - .agents/memory
+    - .agents/memory/principles
+    - .agents/tasks
+    - .agents/tools
+    - AGENT.md
+    - README.md

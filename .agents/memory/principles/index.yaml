@@ -1,0 +1,12 @@
+memories:
+  - id: constitution
+    title: Agent constitution
+    file: constitution.md
+    tags:
+      - principles
+      - boundaries
+      - safety
+    read_when:
+      - changing repo-wide rules
+      - making workflow decisions
+      - deciding whether an implementation violates project boundaries

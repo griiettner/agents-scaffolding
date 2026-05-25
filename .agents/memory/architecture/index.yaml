@@ -1,0 +1,13 @@
+memories:
+  - id: architecture-overview
+    title: Architecture overview
+    file: overview.md
+    tags:
+      - architecture
+      - routing
+      - scaffolding
+    read_when:
+      - changing folder structure
+      - deciding where project knowledge should live
+      - creating new agent workflows
+      - evaluating whether a file belongs in skills, memory, or tasks

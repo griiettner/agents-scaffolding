@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls *)",
+      "Bash(rg *)",
+      "Bash(find *)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(python3 .agents/tools/sync_claude_skills.py *)",
+      "Bash(python3 .agents/tools/tkt_sync.py)",
+      "Bash(python3 .agents/tools/tkt_validate.py *)",
+      "Read(.agents/**)",
+      "Read(.claude/**)",
+      "Edit(.agents/tasks/**)",
+      "Write(.agents/tasks/**)",
+      "Edit(.agents/memory/**)",
+      "Write(.agents/memory/**)",
+      "Edit(.agents/skills/**)",
+      "Write(.agents/skills/**)",
+      "Edit(.claude/**)",
+      "Write(.claude/**)",
+      "Edit(AGENT.md)",
+      "Edit(CLAUDE.md)",
+      "Edit(README.md)"
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+---
+name: commit
+description: Commit staged changes with an auto-generated conventional commit message. Use when the user wants to quickly commit what is already staged. Invoked via /commit.
+---
+
+# Claude Compatibility Stub
+
+This file exists so Claude Code can discover this project skill.
+
+Canonical skill content lives at:
+
+- `.agents/skills/commit/SKILL.md`
+
+Read the canonical skill file before using this skill.
+
+Do not edit this stub manually. Regenerate it from the canonical `.agents/skills/` tree.

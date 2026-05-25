@@ -1,0 +1,74 @@
+---
+description: Canonical project knowledge lives in AGENT.md and .agents/; use indexes and task folders instead of bulk-loading context
+alwaysApply: true
+---
+
+# `AGENT.md` and `.agents/` are the source of truth
+
+This repository uses `AGENT.md` plus `.agents/` as the canonical project context structure.
+
+Use:
+
+- `AGENT.md` as the lightweight boot router
+- `.agents/memory/` for durable knowledge
+- `.agents/skills/` for reusable procedures
+- `.agents/tasks/` for task and ticket history
+
+Do not treat generated indexes as canonical truth. Indexes are routing aids only.
+
+## Session start
+
+1. Read `AGENT.md`.
+2. If the work is task-specific, read `.agents/tasks/index.yaml` only to find the relevant shard, then open the specific `TKT-XXX/` folder.
+3. If the work needs durable project knowledge, read `.agents/memory/MEMORY.md` and then the smallest relevant `index.yaml`.
+4. If the work concerns workflow behavior, open the relevant skill under `.agents/skills/`.
+5. Load only the files required for the current task.
+
+## Context discovery
+
+- Do not scan all files under `.agents/` by default.
+- Read routing files first, then the smallest relevant artifact set.
+- Treat `.agents/tasks/TKT-XXX/` as the source of truth for ticket-specific history.
+- Treat memory category files as the source of truth for durable knowledge.
+- Treat `.agents/tasks/index.yaml` and category `index.yaml` files as helper metadata only.
+
+## Writing new knowledge
+
+- Durable project knowledge goes in `.agents/memory/<category>/`.
+- Reusable procedures go in `.agents/skills/<name>/SKILL.md`.
+- Task or ticket history goes in `.agents/tasks/TKT-XXX/`.
+- Planning notes that are not yet tied to a specific ticket can go in `.agents/plans/`.
+
+Use YAML frontmatter in:
+
+- durable memory `.md` files inside memory categories
+- task artifacts such as `concept.md`, `plan.md`, `task.md`, `report.md`, and update files
+
+Do not store canonical project knowledge in tool-specific global folders.
+
+## Task workflow
+
+When creating or updating ticket context:
+
+- use the smallest useful artifact set
+- prefer `task.md` as the minimum executable artifact
+- add `plan.md` only when the work needs a real plan
+- add `report.md` when completion context will help future work
+- add `updates/YYYY-MM-DD-<slug>.md` for later follow-up on an existing ticket
+
+Do not create placeholder artifacts just to satisfy structure.
+
+## Maintenance
+
+After adding, removing, or renaming task or memory files, run:
+
+```bash
+python3 .agents/tools/tkt_sync.py
+python3 .agents/tools/tkt_validate.py .agents/tasks
+```
+
+## Practical rule
+
+Read indexes first.
+Open only the smallest relevant file set.
+Prefer canonical files over generated metadata.
