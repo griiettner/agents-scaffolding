@@ -7,6 +7,8 @@ import re
 import sys
 from pathlib import Path
 
+from frontmatter_utils import LIST_FIELDS, load_frontmatter
+
 
 KNOWN_ARTIFACTS = ("concept", "plan", "task", "report")
 REQUIRED_FIELDS = ("id", "title", "artifact", "status", "created", "updated")
@@ -14,6 +16,8 @@ TICKET_RE = re.compile(r"^TKT-\d{3}$")
 INDEX_ID_RE = re.compile(r"^\s*-\s+id:\s+(TKT-\d{3})\s*$", re.MULTILINE)
 INDEX_PATH_RE = re.compile(r"\.agents/tasks/[^\s,\]\}]+")
 SHARD_PATH_RE = re.compile(r"\.agents/tasks/indexes/TKT-\d{3}-\d{3}\.yaml")
+ALLOWED_STATUSES = {"concept", "planning", "ready", "in_progress", "done", "blocked", "cancelled"}
+ALLOWED_ARTIFACTS = {"concept", "plan", "task", "report", "update"}
 
 
 class Outcome:
@@ -38,6 +42,7 @@ def main() -> int:
         return finish(outcome)
 
     ticket_ids = validate_ticket_folders(root, outcome)
+    validate_memory_frontmatter(repo_root / ".agents/memory", outcome)
     validate_optional_index(root, repo_root, ticket_ids, outcome)
     return finish(outcome)
 
@@ -86,30 +91,58 @@ def validate_ticket_folder(path: Path, ticket_id: str, outcome: Outcome) -> None
 
 
 def validate_artifact(path: Path, ticket_id: str, expected_artifact: str, outcome: Outcome) -> None:
-    try:
-        content = path.read_text(encoding="utf-8")
-    except OSError as exc:
-        outcome.error(f"cannot read artifact {path}: {exc}")
+    metadata, parse_errors = load_frontmatter(path)
+    if parse_errors:
+        for parse_error in parse_errors:
+            outcome.error(parse_error.render())
         return
 
-    frontmatter = extract_frontmatter(content)
-    if frontmatter is None:
+    if not metadata:
         outcome.error(f"missing YAML frontmatter: {path}")
         return
 
-    fields = parse_simple_frontmatter(frontmatter)
-
     for field in REQUIRED_FIELDS:
-        if not fields.get(field):
+        if not metadata.get(field):
             outcome.error(f"missing `{field}` in {path}")
 
-    if fields.get("id") and fields["id"] != ticket_id:
-        outcome.error(f"id mismatch in {path}: expected {ticket_id}, got {fields['id']}")
+    if metadata.get("id") and metadata["id"] != ticket_id:
+        outcome.error(f"id mismatch in {path}: expected {ticket_id}, got {metadata['id']}")
 
-    if fields.get("artifact") and fields["artifact"] != expected_artifact:
+    if metadata.get("artifact") and metadata["artifact"] not in ALLOWED_ARTIFACTS:
+        outcome.error(f"unsupported artifact value in {path}: {metadata['artifact']}")
+
+    if metadata.get("artifact") and metadata["artifact"] != expected_artifact:
         outcome.error(
-            f"artifact mismatch in {path}: expected {expected_artifact}, got {fields['artifact']}"
+            f"artifact mismatch in {path}: expected {expected_artifact}, got {metadata['artifact']}"
         )
+
+    if metadata.get("status") and metadata["status"] not in ALLOWED_STATUSES:
+        outcome.warn(f"suspicious status value in {path}: {metadata['status']}")
+
+    for field in LIST_FIELDS:
+        value = metadata.get(field)
+        if value is not None and not isinstance(value, list):
+            outcome.error(f"field `{field}` must be a list in {path}")
+
+
+def validate_memory_frontmatter(memory_root: Path, outcome: Outcome) -> None:
+    if not memory_root.is_dir():
+        return
+
+    for category_dir in sorted(path for path in memory_root.iterdir() if path.is_dir()):
+        for memory_path in sorted(category_dir.glob("*.md")):
+            if memory_path.name == "index.md":
+                continue
+            metadata, parse_errors = load_frontmatter(memory_path)
+            for parse_error in parse_errors:
+                outcome.warn(parse_error.render())
+            if not metadata:
+                outcome.warn(f"memory file is missing YAML frontmatter: {memory_path}")
+                continue
+            if not metadata.get("id"):
+                outcome.warn(f"memory file is missing `id`: {memory_path}")
+            if not metadata.get("title"):
+                outcome.warn(f"memory file is missing `title`: {memory_path}")
 
 
 def validate_optional_index(root: Path, repo_root: Path, ticket_ids: set[str], outcome: Outcome) -> None:
@@ -182,26 +215,6 @@ def validate_sharded_index(root: Path, repo_root: Path, content: str, ticket_ids
 def resolve_index_path(repo_root: Path, raw_path: str) -> Path:
     path = Path(raw_path)
     return path if path.is_absolute() else repo_root / path
-
-
-def extract_frontmatter(content: str) -> str | None:
-    if not content.startswith("---\n"):
-        return None
-    end = content.find("\n---", 4)
-    if end == -1:
-        return None
-    return content[4:end]
-
-
-def parse_simple_frontmatter(frontmatter: str) -> dict[str, str]:
-    fields: dict[str, str] = {}
-    for line in frontmatter.splitlines():
-        if not line or line.startswith(" ") or line.startswith("-"):
-            continue
-        key, separator, value = line.partition(":")
-        if separator:
-            fields[key.strip()] = value.strip().strip("\"'")
-    return fields
 
 
 def finish(outcome: Outcome) -> int:

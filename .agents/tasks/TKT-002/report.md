@@ -9,7 +9,7 @@ updated: 2026-05-25
 dependencies:
   - TKT-001
 areas:
-  - AGENT.md
+  - AGENTS.md
   - .agents/memory/principles
 skills:
   - tkt-management

@@ -1,15 +1,15 @@
 ---
-description: Canonical project knowledge lives in AGENT.md and .agents/; use indexes and task folders instead of bulk-loading context
+description: Canonical project knowledge lives in AGENTS.md and .agents/; use indexes and task folders instead of bulk-loading context
 alwaysApply: true
 ---
 
-# `AGENT.md` and `.agents/` are the source of truth
+# `AGENTS.md` and `.agents/` are the source of truth
 
-This repository uses `AGENT.md` plus `.agents/` as the canonical project context structure.
+This repository uses `AGENTS.md` plus `.agents/` as the canonical project context structure.
 
 Use:
 
-- `AGENT.md` as the lightweight boot router
+- `AGENTS.md` as the lightweight boot router
 - `.agents/memory/` for durable knowledge
 - `.agents/skills/` for reusable procedures
 - `.agents/tasks/` for task and ticket history
@@ -18,7 +18,7 @@ Do not treat generated indexes as canonical truth. Indexes are routing aids only
 
 ## Session start
 
-1. Read `AGENT.md`.
+1. Read `AGENTS.md`.
 2. If the work is task-specific, read `.agents/tasks/index.yaml` only to find the relevant shard, then open the specific `TKT-XXX/` folder.
 3. If the work needs durable project knowledge, read `.agents/memory/MEMORY.md` and then the smallest relevant `index.yaml`.
 4. If the work concerns workflow behavior, open the relevant skill under `.agents/skills/`.

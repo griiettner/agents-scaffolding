@@ -9,7 +9,7 @@ updated: 2026-05-25
 dependencies:
   - TKT-001
 areas:
-  - AGENT.md
+  - AGENTS.md
   - .agents/memory/principles
 skills:
   - tkt-management
@@ -23,7 +23,7 @@ Document the project-specific boundaries that agents must respect after the scaf
 
 ## Scope
 
-- Update `AGENT.md` boundaries.
+- Update `AGENTS.md` boundaries.
 - Update `.agents/memory/principles/constitution.md`.
 - Record only the rules that should persist across tasks.
 

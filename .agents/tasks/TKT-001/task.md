@@ -8,7 +8,7 @@ created: 2026-05-25
 updated: 2026-05-25
 dependencies: []
 areas:
-  - AGENT.md
+  - AGENTS.md
   - .agents/memory
   - .agents/tasks
   - .agents/tools

@@ -8,7 +8,7 @@ created: 2026-05-25
 updated: 2026-05-25
 dependencies: []
 areas:
-  - AGENT.md
+  - AGENTS.md
   - .agents/memory
   - .agents/tasks
   - .agents/tools
@@ -23,6 +23,6 @@ Create a reusable repository scaffold that demonstrates how to organize agent ro
 ## Success Criteria
 
 - A cloned repo can be adapted to a new project with minimal edits.
-- `AGENT.md` and `MEMORY.md` behave as lightweight routers.
+- `AGENTS.md` and `MEMORY.md` behave as lightweight routers.
 - Example tasks demonstrate both full and slim ticket modes.
 - Helper indexes can be regenerated from canonical files.

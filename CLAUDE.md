@@ -6,21 +6,21 @@ This file is a redirect, not the source of truth.
 
 For this repository, the authoritative project context lives in:
 
-1. `AGENT.md`
+1. `AGENTS.md`
 2. `.agents/memory/`
 3. `.agents/skills/`
 4. `.agents/tasks/`
 
 Claude Code compatibility skills may also appear under `.claude/skills/`, but those files are generated stubs. The canonical skill content still lives under `.agents/skills/`.
 
-If this file conflicts with `AGENT.md` or anything under `.agents/`, follow `AGENT.md` and `.agents/`.
+If this file conflicts with `AGENTS.md` or anything under `.agents/`, follow `AGENTS.md` and `.agents/`.
 
 ## Required startup behavior
 
 When starting work in this repository:
 
-1. Read `AGENT.md` first.
-2. Use `AGENT.md` as the routing file.
+1. Read `AGENTS.md` first.
+2. Use `AGENTS.md` as the routing file.
 3. Read only the smallest relevant files under `.agents/`.
 4. Treat generated `index.yaml` files as routing aids, not canonical truth.
 
@@ -31,6 +31,7 @@ If Claude Code needs refreshed project skill discovery metadata, run:
 - `/sync-skills`
 
 That command regenerates `.claude/skills/` stubs from the canonical `.agents/skills/` tree.
+By default it refreshes generated stubs and preserves Claude-only user content under `.claude/skills/`.
 
 ## Writing rules
 
@@ -43,6 +44,6 @@ That command regenerates `.claude/skills/` stubs from the canonical `.agents/ski
 
 ## Practical rule
 
-`AGENT.md` is the ruler.
+`AGENTS.md` is the ruler.
 `.agents/` is the system of record.
 `CLAUDE.md` only exists to make that explicit.

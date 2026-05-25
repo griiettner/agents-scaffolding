@@ -3,14 +3,12 @@
 
 from __future__ import annotations
 
-import re
 import sys
 from pathlib import Path
 
+from frontmatter_utils import FrontmatterError, load_frontmatter
 
 ARTIFACTS = ("concept", "plan", "task", "report")
-TICKET_RE = re.compile(r"^TKT-\d{3}$")
-LIST_FIELDS = ("dependencies", "areas", "skills", "tags", "read_when")
 TASK_SHARD_SIZE = 25
 
 
@@ -23,24 +21,33 @@ def main() -> int:
         print(f"error: missing tasks root: {tasks_root}", file=sys.stderr)
         return 1
 
-    sync_tasks_index(repo, tasks_root)
-    sync_memory_indexes(memory_root)
+    errors: list[FrontmatterError] = []
+
+    sync_tasks_index(repo, tasks_root, errors)
+    sync_memory_indexes(memory_root, errors)
+
+    if errors:
+        for error in errors:
+            print(f"error: {error.render()}", file=sys.stderr)
+        print(f"tkt_sync failed ({len(errors)} frontmatter error(s))", file=sys.stderr)
+        return 1
+
     print("synced .agents task and memory indexes")
     return 0
 
 
-def sync_tasks_index(repo: Path, tasks_root: Path) -> None:
+def sync_tasks_index(repo: Path, tasks_root: Path, errors: list[FrontmatterError]) -> None:
     entries = []
 
     for ticket_dir in sorted(path for path in tasks_root.iterdir() if path.is_dir()):
         ticket_id = ticket_dir.name
-        if not TICKET_RE.match(ticket_id):
+        if not is_ticket_id(ticket_id):
             continue
 
         artifacts = existing_artifacts(repo, ticket_dir)
         primary = first_existing(ticket_dir, ("task", "concept", "plan", "report"))
-        metadata = read_frontmatter(primary) if primary else {}
-        report_metadata = read_frontmatter(ticket_dir / "report.md")
+        metadata = read_frontmatter(primary, errors) if primary else {}
+        report_metadata = read_frontmatter(ticket_dir / "report.md", errors)
 
         title = metadata.get("title") or title_from_ticket_id(ticket_id)
         status = report_metadata.get("status") or metadata.get("status") or "planning"
@@ -100,7 +107,7 @@ def write_task_indexes(repo: Path, tasks_root: Path, entries: list[dict[str, obj
     tasks_root.joinpath("index.yaml").write_text(render_task_router(shards), encoding="utf-8")
 
 
-def sync_memory_indexes(memory_root: Path) -> None:
+def sync_memory_indexes(memory_root: Path, errors: list[FrontmatterError]) -> None:
     if not memory_root.is_dir():
         return
 
@@ -109,7 +116,7 @@ def sync_memory_indexes(memory_root: Path) -> None:
         for memory_file in sorted(category_dir.glob("*.md")):
             if memory_file.name == "index.md":
                 continue
-            metadata = read_frontmatter(memory_file)
+            metadata = read_frontmatter(memory_file, errors)
             memory_id = metadata.get("id") or memory_file.stem
             title = metadata.get("title") or title_from_slug(memory_file.stem)
             tags = metadata.get("tags", [])
@@ -150,53 +157,21 @@ def first_existing(ticket_dir: Path, names: tuple[str, ...]) -> Path | None:
 
 def newest_updated(ticket_dir: Path) -> str:
     values = []
-    for path in sorted(ticket_dir.glob("*.md")) + sorted((ticket_dir / "updates").glob("*.md")):
-        metadata = read_frontmatter(path)
+    updates_dir = ticket_dir / "updates"
+    update_files = sorted(updates_dir.glob("*.md")) if updates_dir.is_dir() else []
+    for path in sorted(ticket_dir.glob("*.md")) + update_files:
+        metadata, frontmatter_errors = load_frontmatter(path)
+        if frontmatter_errors:
+            continue
         if metadata.get("updated"):
             values.append(str(metadata["updated"]))
     return max(values) if values else ""
 
 
-def read_frontmatter(path: Path) -> dict[str, object]:
-    if not path.exists():
-        return {}
-    content = path.read_text(encoding="utf-8")
-    if not content.startswith("---\n"):
-        return {}
-    end = content.find("\n---", 4)
-    if end == -1:
-        return {}
-    return parse_frontmatter(content[4:end])
-
-
-def parse_frontmatter(frontmatter: str) -> dict[str, object]:
-    result: dict[str, object] = {}
-    current_list: str | None = None
-
-    for line in frontmatter.splitlines():
-        if not line.strip():
-            continue
-        if line.startswith("  - ") and current_list:
-            result.setdefault(current_list, []).append(clean_scalar(line[4:]))
-            continue
-        if line.startswith(" ") or line.startswith("- "):
-            continue
-        key, separator, value = line.partition(":")
-        if not separator:
-            continue
-        key = key.strip()
-        value = value.strip()
-        if key in LIST_FIELDS and not value:
-            result[key] = []
-            current_list = key
-        else:
-            result[key] = clean_scalar(value)
-            current_list = None
-    return result
-
-
-def clean_scalar(value: str) -> str:
-    return value.strip().strip("\"'")
+def read_frontmatter(path: Path, errors: list[FrontmatterError]) -> dict[str, object]:
+    metadata, frontmatter_errors = load_frontmatter(path)
+    errors.extend(frontmatter_errors)
+    return metadata
 
 
 def render_tasks_index(entries: list[dict[str, object]]) -> str:
@@ -304,6 +279,10 @@ def max_ticket_number(entries: list[dict[str, object]]) -> int:
 
 def ticket_number(ticket_id: str) -> int:
     return int(ticket_id.split("-")[1])
+
+
+def is_ticket_id(ticket_id: str) -> bool:
+    return ticket_id.startswith("TKT-") and len(ticket_id) == 7 and ticket_id[4:].isdigit()
 
 
 def title_from_ticket_id(ticket_id: str) -> str:

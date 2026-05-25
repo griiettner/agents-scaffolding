@@ -8,7 +8,7 @@ created: 2026-05-25
 updated: 2026-05-25
 dependencies: []
 areas:
-  - AGENT.md
+  - AGENTS.md
   - .agents/memory
   - .agents/tasks
   - .agents/tools
@@ -24,7 +24,7 @@ Build a generic repository scaffold that shows how to separate routing, memory, 
 
 ## Decisions
 
-- Keep `AGENT.md` short and route-focused.
+- Keep `AGENTS.md` short and route-focused.
 - Keep `MEMORY.md` short and route-focused.
 - Use YAML frontmatter for durable memory files and task artifacts.
 - Use generated `index.yaml` files as helper metadata only.
@@ -32,7 +32,7 @@ Build a generic repository scaffold that shows how to separate routing, memory, 
 
 ## Deliverables
 
-- Generic `AGENT.md`
+- Generic `AGENTS.md`
 - Generic memory examples under `.agents/memory/`
 - Task workflow skills under `.agents/skills/`
 - Example tickets under `.agents/tasks/`

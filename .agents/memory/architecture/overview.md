@@ -22,7 +22,7 @@ This repository demonstrates an agent-friendly documentation layout.
 
 ## Core structure
 
-- `AGENT.md` is the boot router. It should stay short and tell the agent where to look next.
+- `AGENTS.md` is the boot router. It should stay short and tell the agent where to look next.
 - `.agents/memory/` stores durable cross-task knowledge.
 - `.agents/skills/` stores reusable procedures and command-like workflows.
 - `.agents/tasks/` stores the lifecycle history for specific work units.
@@ -34,7 +34,7 @@ Agents should not load the entire repository context at startup.
 
 Recommended order:
 
-1. Read `AGENT.md`.
+1. Read `AGENTS.md`.
 2. Choose the smallest relevant index.
 3. Open only the files needed for the current task.
 4. Treat task folders as canonical for ticket-specific history.
