@@ -709,6 +709,20 @@ Codex `$skill-name` suggestions are driven by project-local files under `.agents
 
 The Codex session must be opened at this repository root. If Codex is opened from another workspace and merely edits this folder through absolute paths, these project-local skills will not be part of that session's suggestions.
 
+Check whether Codex has an exact trusted project entry for this repo:
+
+```bash
+python3 .agents/tools/trust_codex_project.py --check
+```
+
+If it reports `not trusted`, add or repair the trust entry explicitly:
+
+```bash
+python3 .agents/tools/trust_codex_project.py
+```
+
+After trust is added, start a fresh Codex session at this repository root so the app reloads project-local skills and permissions.
+
 For best discovery, each skill should include:
 
 - `.agents/skills/<name>/SKILL.md`

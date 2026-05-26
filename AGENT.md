@@ -18,6 +18,7 @@ Replace the examples with your own project context after cloning.
 
 ## Context Routing
 
+- Codex project trust: run `python3 .agents/tools/trust_codex_project.py --check`; if it reports `not trusted`, ask the user before running `python3 .agents/tools/trust_codex_project.py`, then tell the user to start a fresh Codex session at this repository root.
 - Task or ticket work: read `.agents/tasks/index.yaml` only to choose the relevant shard, then read the specific `.agents/tasks/TKT-XXX/` folder.
 - Ticket workflow rules: read `.agents/skills/tkt-management/SKILL.md`.
 - Durable memory router: read `.agents/memory/MEMORY.md`.
@@ -41,5 +42,6 @@ Only load files relevant to the current task.
 - Keep frontmatter to the scaffold's supported subset: scalars, `[]`, inline scalar lists, and block scalar lists.
 - Read indexes first, then the smallest relevant file set.
 - Keep helper indexes regenerable from canonical files.
+- Check exact Codex project trust with `python3 .agents/tools/trust_codex_project.py --check`.
 - Validate ticket structure with `python3 .agents/tools/tkt_validate.py .agents/tasks`.
 - Regenerate helper indexes with `python3 .agents/tools/tkt_sync.py`.
