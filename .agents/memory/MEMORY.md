@@ -6,6 +6,7 @@ Use the current task to choose the smallest relevant index:
 
 - Architecture context: `.agents/memory/architecture/index.yaml`
 - Durable decisions and ADRs: `.agents/memory/decisions/index.yaml`
+- Operational runbooks and recurring workflows: `.agents/memory/operations/index.yaml`
 - Project principles and non-negotiables: `.agents/memory/principles/index.yaml`
 - Ticket history: load the relevant `.agents/tasks/TKT-XXX/` folder directly
 

@@ -29,7 +29,7 @@ add complexity only when it earns its place.
 
 This repo gives you a starting structure for organizing:
 
-- `AGENT.md` as a lightweight boot router
+- `AGENTS.md` as a lightweight boot router
 - `.agents/memory/` for durable knowledge
 - `.agents/skills/` for reusable procedures
 - `.agents/tasks/` for ticket or work-unit history
@@ -56,7 +56,7 @@ This scaffold solves that by separating routing, memory, procedures, and task hi
 
 ```text
 .
-├── AGENT.md
+├── AGENTS.md
 ├── CLAUDE.md
 ├── README.md
 ├── .claude/
@@ -106,9 +106,9 @@ This scaffold solves that by separating routing, memory, procedures, and task hi
 
 ## Core concepts
 
-### `AGENT.md`
+### `AGENTS.md`
 
-`AGENT.md` is the boot context.
+`AGENTS.md` is the boot context.
 
 It should stay short. Its job is to route the agent to the next relevant files, not to contain the whole project memory.
 
@@ -183,7 +183,7 @@ This scaffold intentionally supports a small, explicit subset of YAML in frontma
 
 ```yaml
 areas:
-  - AGENT.md
+  - AGENTS.md
   - .agents/tasks
 ```
 
@@ -226,7 +226,7 @@ created: 2026-05-25
 updated: 2026-05-25
 dependencies: []
 areas:
-  - AGENT.md
+  - AGENTS.md
   - .agents/memory
 skills:
   - tkt-management
@@ -587,7 +587,7 @@ cd agents-scaffolding
 
 ### 2. Rewrite the boot context
 
-Update `AGENT.md` so it describes your actual project and routing rules.
+Update `AGENTS.md` so it describes your actual project and routing rules.
 
 At minimum, replace:
 
@@ -596,7 +596,7 @@ At minimum, replace:
 - repo conventions
 - any example-specific references
 
-Also keep `CLAUDE.md` aligned so Claude users are redirected to `AGENT.md` and `.agents/`.
+Also keep `CLAUDE.md` aligned so Claude users are redirected to `AGENTS.md` and `.agents/`.
 
 ### 3. Rewrite durable memory
 
@@ -679,6 +679,12 @@ If you are inside Claude Code, you can expose the same operation as a project co
 
 Do not edit files under `.claude/skills/` manually.
 
+### 8. Migrate from an existing `.cursor`/`.claude` repo
+
+If you are adopting this scaffold into a repository that already has agent context in `.cursor/` and/or `.claude/`, refer to [MIGRATION.md](./MIGRATION.md).
+
+When using an AI agent, explicitly instruct it to read `MIGRATION.md` first and execute the migration workflow defined there.
+
 ## Recommended workflow
 
 ### Create a new ticket
@@ -759,7 +765,7 @@ If newly added skills do not appear immediately, restart or refresh the Codex ap
 
 If you want the fastest path from scaffold to real usage, change these first:
 
-1. `AGENT.md`
+1. `AGENTS.md`
 2. `.agents/memory/architecture/overview.md`
 3. `.agents/memory/principles/constitution.md`
 4. `.agents/skills/tkt-management/SKILL.md`

@@ -1,6 +1,6 @@
 # Agent Context
 
-This file is the lightweight boot context for agents. Use it as a routing map, not as the full project memory.
+This file is the canonical boot context for agents. Use it as a routing map, not as the full project memory.
 
 ## Project Summary
 
@@ -8,7 +8,7 @@ This repository is a generic scaffold for organizing agent-friendly project cont
 
 It demonstrates a minimal but scalable pattern built around:
 
-- `AGENT.md` as the boot router
+- `AGENTS.md` as the boot router
 - `.agents/memory/` for durable knowledge
 - `.agents/skills/` for reusable procedures
 - `.agents/tasks/` for ticket or work-unit history
@@ -32,7 +32,7 @@ Only load files relevant to the current task.
 
 - Do not treat this scaffold's example files as product truth after cloning.
 - Replace example owners, areas, constraints, and decisions with repo-specific values.
-- Keep routing files short; do not turn `AGENT.md` or `MEMORY.md` into dump files.
+- Keep routing files short; do not turn `AGENTS.md` or `MEMORY.md` into dump files.
 - Do not erase unrelated user changes.
 
 ## Repo Conventions
@@ -45,3 +45,9 @@ Only load files relevant to the current task.
 - Check exact Codex project trust with `python3 .agents/tools/trust_codex_project.py --check`.
 - Validate ticket structure with `python3 .agents/tools/tkt_validate.py .agents/tasks`.
 - Regenerate helper indexes with `python3 .agents/tools/tkt_sync.py`.
+
+## Tool-Specific Notes
+
+- Codex compatibility skills may appear under `.Codex/skills/`, and Claude compatibility skills may appear under `.claude/skills/`.
+- Those folders are generated stubs; canonical skill content lives under `.agents/skills/`.
+- Do not store canonical project knowledge in `.Codex/` or `.claude/`.
