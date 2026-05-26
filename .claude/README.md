@@ -4,7 +4,7 @@ This directory exists for Claude-specific project discovery.
 
 In this scaffold:
 
-- canonical agent context lives in `AGENTS.md` and `.agents/`
+- canonical agent context lives in `AGENT.md` and `.agents/`
 - canonical skills live in `.agents/skills/`
 - Claude Code compatibility is provided through generated stubs in `.claude/skills/`
 

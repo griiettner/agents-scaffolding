@@ -14,7 +14,7 @@ tickets:
       updates: .agents/tasks/TKT-001/updates/
     dependencies: []
     areas:
-      - AGENTS.md
+      - AGENT.md
       - .agents/memory
       - .agents/tasks
       - .agents/tools
@@ -34,7 +34,7 @@ tickets:
     dependencies:
       - TKT-001
     areas:
-      - AGENTS.md
+      - AGENT.md
       - .agents/memory/principles
     skills:
       - tkt-management

@@ -4,7 +4,7 @@ A generic repository scaffold for agent-friendly project context.
 
 This repo gives you a starting structure for organizing:
 
-- `AGENTS.md` as a lightweight boot router
+- `AGENT.md` as a lightweight boot router
 - `.agents/memory/` for durable knowledge
 - `.agents/skills/` for reusable procedures
 - `.agents/tasks/` for ticket or work-unit history
@@ -15,7 +15,8 @@ The sample content is intentionally generic. Clone it, then replace the examples
 Implemented compatibility in this repo today:
 
 - Claude Code: automated project-skill discovery bridge through generated `.claude/skills/` stubs
-- Codex and Cursor: naming and workflow conventions only; no native auto-discovery bridge is implemented here
+- Codex: project-local `.agents/skills/` with optional `agents/openai.yaml` metadata for `$skill-name` discovery
+- Cursor: naming and workflow conventions only; no native auto-discovery bridge is implemented here
 
 ## Why this exists
 
@@ -30,7 +31,7 @@ This scaffold solves that by separating routing, memory, procedures, and task hi
 
 ```text
 .
-├── AGENTS.md
+├── AGENT.md
 ├── CLAUDE.md
 ├── README.md
 ├── .claude/
@@ -80,9 +81,9 @@ This scaffold solves that by separating routing, memory, procedures, and task hi
 
 ## Core concepts
 
-### `AGENTS.md`
+### `AGENT.md`
 
-`AGENTS.md` is the boot context.
+`AGENT.md` is the boot context.
 
 It should stay short. Its job is to route the agent to the next relevant files, not to contain the whole project memory.
 
@@ -121,9 +122,19 @@ That gives you:
 - a tool-agnostic canonical structure in `.agents/`
 - compatibility with Claude Code's documented project-skill discovery path
 
-It does not imply equivalent native integration for Codex or Cursor. Those tools can still use the same structure, but this scaffold does not currently generate tool-specific adapters for them.
+It does not imply equivalent native integration for Cursor. Codex can use `.agents/skills/` directly in environments that support project-local skill discovery.
 
 Each generated stub should preserve the skill frontmatter Claude needs for discovery and point Claude to the canonical `.agents/skills/<name>/SKILL.md` file.
+
+### `.agents/skills/<name>/agents/openai.yaml`
+
+Codex can use `agents/openai.yaml` files beside canonical skills for display metadata and invocation policy.
+
+Recommended setup:
+
+- treat `.agents/skills/<name>/SKILL.md` as the source of truth
+- keep `.agents/skills/<name>/agents/openai.yaml` small
+- use `policy.allow_implicit_invocation: false` unless a skill is safe to invoke automatically
 
 ### `.agents/tasks/`
 
@@ -147,7 +158,7 @@ This scaffold intentionally supports a small, explicit subset of YAML in frontma
 
 ```yaml
 areas:
-  - AGENTS.md
+  - AGENT.md
   - .agents/tasks
 ```
 
@@ -190,7 +201,7 @@ created: 2026-05-25
 updated: 2026-05-25
 dependencies: []
 areas:
-  - AGENTS.md
+  - AGENT.md
   - .agents/memory
 skills:
   - tkt-management
@@ -233,11 +244,30 @@ So these are equivalent intents:
 
 If your environment uses a different command syntax, keep the skill names and arguments the same and adapt only the prefix.
 
-These invocation examples are conventions, not proof of native skill discovery support outside Claude Code.
+Codex `$skill-name` discovery depends on the local `.agents/skills/` metadata being present and the current app session having loaded the repository. Cursor invocation examples are conventions unless your Cursor setup adds its own adapter.
 
 ## Included skills
 
 This scaffold ships with a small task-management oriented skill set plus two optional git workflow helpers.
+
+#### `skill-new`
+
+Purpose:
+- creates a new canonical skill under `.agents/skills/`
+- writes `agents/openai.yaml`
+- refreshes Claude stubs
+
+Use it when:
+- you want to add a reusable project-local workflow and make it discoverable
+
+Invocation example:
+```text
+# Claude Code or Cursor
+/skill-new
+
+# Codex
+$skill-new
+```
 
 ### Core task skills
 
@@ -503,6 +533,7 @@ $tkt-task 001
 Recommended minimum:
 
 - `tkt-management`
+- `skill-new`
 - `tkt-new`
 - `tkt-plan`
 - `tkt-exec`
@@ -531,7 +562,7 @@ cd agents-scaffolding
 
 ### 2. Rewrite the boot context
 
-Update `AGENTS.md` so it describes your actual project and routing rules.
+Update `AGENT.md` so it describes your actual project and routing rules.
 
 At minimum, replace:
 
@@ -540,7 +571,7 @@ At minimum, replace:
 - repo conventions
 - any example-specific references
 
-Also keep `CLAUDE.md` aligned so Claude users are redirected to `AGENTS.md` and `.agents/`.
+Also keep `CLAUDE.md` aligned so Claude users are redirected to `AGENT.md` and `.agents/`.
 
 ### 3. Rewrite durable memory
 
@@ -672,11 +703,24 @@ This scaffold therefore uses a compatibility layer:
 
 If you stop generating `.claude/skills/`, expect Claude Code to stop discovering project skills automatically unless Anthropic changes that behavior in the future.
 
+## Notes on Codex skills
+
+Codex `$skill-name` suggestions are driven by project-local files under `.agents/skills/`.
+
+The Codex session must be opened at this repository root. If Codex is opened from another workspace and merely edits this folder through absolute paths, these project-local skills will not be part of that session's suggestions.
+
+For best discovery, each skill should include:
+
+- `.agents/skills/<name>/SKILL.md`
+- `.agents/skills/<name>/agents/openai.yaml`
+
+If newly added skills do not appear immediately, restart or refresh the Codex app session for this repository.
+
 ## What to customize first
 
 If you want the fastest path from scaffold to real usage, change these first:
 
-1. `AGENTS.md`
+1. `AGENT.md`
 2. `.agents/memory/architecture/overview.md`
 3. `.agents/memory/principles/constitution.md`
 4. `.agents/skills/tkt-management/SKILL.md`

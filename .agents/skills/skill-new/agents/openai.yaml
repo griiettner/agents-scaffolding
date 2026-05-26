@@ -1,0 +1,6 @@
+interface:
+  display_name: Skill New
+  short_description: Create a project-local skill and refresh Claude stubs.
+  default_prompt: Use $skill-new to create a new local project skill.
+policy:
+  allow_implicit_invocation: false

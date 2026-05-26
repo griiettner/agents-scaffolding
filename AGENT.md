@@ -1,4 +1,4 @@
-# Agents Context
+# Agent Context
 
 This file is the lightweight boot context for agents. Use it as a routing map, not as the full project memory.
 
@@ -8,7 +8,7 @@ This repository is a generic scaffold for organizing agent-friendly project cont
 
 It demonstrates a minimal but scalable pattern built around:
 
-- `AGENTS.md` as the boot router
+- `AGENT.md` as the boot router
 - `.agents/memory/` for durable knowledge
 - `.agents/skills/` for reusable procedures
 - `.agents/tasks/` for ticket or work-unit history
@@ -31,7 +31,7 @@ Only load files relevant to the current task.
 
 - Do not treat this scaffold's example files as product truth after cloning.
 - Replace example owners, areas, constraints, and decisions with repo-specific values.
-- Keep routing files short; do not turn `AGENTS.md` or `MEMORY.md` into dump files.
+- Keep routing files short; do not turn `AGENT.md` or `MEMORY.md` into dump files.
 - Do not erase unrelated user changes.
 
 ## Repo Conventions

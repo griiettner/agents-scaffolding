@@ -8,6 +8,7 @@
       "Bash(git diff *)",
       "Bash(git log *)",
       "Bash(git add *)",
+      "Bash(python3 .agents/tools/create_skill.py *)",
       "Bash(python3 .agents/tools/sync_claude_skills.py *)",
       "Bash(python3 .agents/tools/tkt_sync.py)",
       "Bash(python3 .agents/tools/tkt_validate.py *)",
@@ -21,7 +22,7 @@
       "Write(.agents/skills/**)",
       "Edit(.claude/**)",
       "Write(.claude/**)",
-      "Edit(AGENTS.md)",
+      "Edit(AGENT.md)",
       "Edit(CLAUDE.md)",
       "Edit(README.md)"
     ]
