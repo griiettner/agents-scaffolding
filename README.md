@@ -1,6 +1,31 @@
-# agents-scaffolding
+# Simple Agents Scaffolding
 
-A generic repository scaffold for agent-friendly project context.
+Sometimes you don’t need a massive agentic framework for your VibeCoding project.
+
+You need a solid foundation like durable memory, planning + execution loops, reusable skills, structured reporting and tooling that doesn’t fight you.
+
+That’s why Simpe Agents Scaffolding was created.
+
+It’s a lightweight scaffolding for building practical AI agents with:
+
+- Durable memory
+- A TKT system for AI agents for planning, execution, and reporting
+- Basic composable skills
+- Clean structure you can actually extend without rewriting everything later
+
+The goal wasn’t to create another “autonomous AGI operating system.”
+
+The goal was to make something practical: A setup where agents can plan work, execute tasks, keep context over time, and report results in a predictable way.
+
+It works with Claude, Codex, and Cursor, so you can plug it into the tools developers are already using instead of forcing a custom ecosystem.
+
+A lot of agent projects become overengineered before they become useful.
+
+This repo tries to go in the opposite direction:
+
+start simple,
+keep the primitives clean,
+add complexity only when it earns its place.
 
 This repo gives you a starting structure for organizing:
 
